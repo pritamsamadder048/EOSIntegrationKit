@@ -2,6 +2,8 @@
 
 #include "EOSVoiceChat.h" 
 
+#include "EIKSettings.h"
+
 #if WITH_EOS_RTC
 
 #include "Async/Async.h"
@@ -95,8 +97,13 @@ void FEOSVoiceChat::Initialize(const FOnVoiceChatInitializeCompleteDelegate& Ini
 	{
 	case EInitializationState::Uninitialized:
 	{
-		bool bEnabled = true;
-		GConfig->GetBool(TEXT("EOSVoiceChat"), TEXT("bEnabled"), bEnabled, GEngineIni);
+			bool bEnabled = true;
+			FEOSArtifactSettings VoiceArtifactSettings;
+			if(const UEIKSettings* EIKSettings = GetMutableDefault<UEIKSettings>())
+			{
+				bEnabled = !(EIKSettings->VoiceArtifactName.IsEmpty());
+				EIKSettings->ManualGetSettingsForArtifact(EIKSettings->VoiceArtifactName,VoiceArtifactSettings);
+			}
 		if (bEnabled)
 		{
 			InitSession.State = EInitializationState::Initializing;
@@ -106,23 +113,25 @@ void FEOSVoiceChat::Initialize(const FOnVoiceChatInitializeCompleteDelegate& Ini
 				EOS_EResult EosResult = SDKManager.Initialize();
 				if (EosResult == EOS_EResult::EOS_Success)
 				{
-					FString ConfigProductId;
-					FString ConfigSandboxId;
-					FString ConfigDeploymentId;
-					FString ConfigClientId;
-					FString ConfigClientSecret;
-					FString ConfigEncryptionKey;
-					FString ConfigOverrideCountryCode;
-					FString ConfigOverrideLocaleCode;
-
-					GConfig->GetString(TEXT("EOSVoiceChat"), TEXT("ProductId"), ConfigProductId, GEngineIni);
-					GConfig->GetString(TEXT("EOSVoiceChat"), TEXT("SandboxId"), ConfigSandboxId, GEngineIni);
-					GConfig->GetString(TEXT("EOSVoiceChat"), TEXT("DeploymentId"), ConfigDeploymentId, GEngineIni);
-					GConfig->GetString(TEXT("EOSVoiceChat"), TEXT("ClientId"), ConfigClientId, GEngineIni);
-					GConfig->GetString(TEXT("EOSVoiceChat"), TEXT("ClientSecret"), ConfigClientSecret, GEngineIni);
-					GConfig->GetString(TEXT("EOSVoiceChat"), TEXT("ClientEncryptionKey"), ConfigEncryptionKey, GEngineIni);
-					GConfig->GetString(TEXT("EOSVoiceChat"), TEXT("OverrideCountryCode"), ConfigOverrideCountryCode, GEngineIni);
-					GConfig->GetString(TEXT("EOSVoiceChat"), TEXT("OverrideLocaleCode"), ConfigOverrideLocaleCode, GEngineIni);
+					FString ConfigProductId = VoiceArtifactSettings.ProductId;
+					FString ConfigSandboxId = VoiceArtifactSettings.SandboxId;
+					FString ConfigDeploymentId = VoiceArtifactSettings.DeploymentId;
+					FString ConfigClientId = VoiceArtifactSettings.ClientId;
+					FString ConfigClientSecret = VoiceArtifactSettings.ClientSecret;
+					FString ConfigEncryptionKey = VoiceArtifactSettings.EncryptionKey;
+					FString ConfigOverrideCountryCode = "";
+					FString ConfigOverrideLocaleCode = "";
+					if(ConfigProductId.IsEmpty() || ConfigSandboxId.IsEmpty() || ConfigDeploymentId.IsEmpty() || ConfigClientId.IsEmpty() || ConfigClientSecret.IsEmpty() || ConfigEncryptionKey.IsEmpty())
+					{
+						GConfig->GetString(TEXT("EOSVoiceChat"), TEXT("ProductId"), ConfigProductId, GEngineIni);
+						GConfig->GetString(TEXT("EOSVoiceChat"), TEXT("SandboxId"), ConfigSandboxId, GEngineIni);
+						GConfig->GetString(TEXT("EOSVoiceChat"), TEXT("DeploymentId"), ConfigDeploymentId, GEngineIni);
+						GConfig->GetString(TEXT("EOSVoiceChat"), TEXT("ClientId"), ConfigClientId, GEngineIni);
+						GConfig->GetString(TEXT("EOSVoiceChat"), TEXT("ClientSecret"), ConfigClientSecret, GEngineIni);
+						GConfig->GetString(TEXT("EOSVoiceChat"), TEXT("ClientEncryptionKey"), ConfigEncryptionKey, GEngineIni);
+						GConfig->GetString(TEXT("EOSVoiceChat"), TEXT("OverrideCountryCode"), ConfigOverrideCountryCode, GEngineIni);
+						GConfig->GetString(TEXT("EOSVoiceChat"), TEXT("OverrideLocaleCode"), ConfigOverrideLocaleCode, GEngineIni);
+					}
 
 					const FTCHARToUTF8 Utf8ProductId(*ConfigProductId);
 					const FTCHARToUTF8 Utf8SandboxId(*ConfigSandboxId);

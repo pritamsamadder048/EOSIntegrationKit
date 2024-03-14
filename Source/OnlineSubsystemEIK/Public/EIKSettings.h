@@ -154,8 +154,19 @@ public:
 	FString CacheDir = TEXT("CacheDir");
 
 	/** Used when launched from a store other than EGS or when the specified artifact name was not present */
-	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category="EOS Settings")
+	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category="EOS Settings|Artifact Names")
 	FString DefaultArtifactName;
+
+	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category="EOS Settings|Artifact Names")
+	FString AndroidArtifactName;
+
+	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category="EOS Settings|Artifact Names",DisplayName="IOS Artifact Name")
+	FString IosArtifactName;
+
+	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category="EOS Settings|Artifact Names")
+	FString VoiceArtifactName;
+	
+	
 
 	/** Used to throttle how much time EOS ticking can take */
 	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category="EOS Settings")
@@ -190,27 +201,27 @@ public:
 	TArray<FEArtifactSettings> Artifacts;
 
 	/** Set to true to have Epic Accounts used (friends list will be unified with the default platform) */
-	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category="EOSPlus Login Settings", DisplayName="Use Epic Account for EOS login (requires account linking)")
+	UPROPERTY()
 	bool bUseEAS = false;
 
 	/** Set to true to have EOS Connect APIs used to link accounts for crossplay */
-	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category="EOSPlus Login Settings", DisplayName="Use Crossplatform User IDs for EOS Login (doesn't use Epic Account)")
+	UPROPERTY()
 	bool bUseEOSConnect = false;
 
 	/** Set to true to write stats to EOS as well as the default platform */
-	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category="Crossplay Settings")
+	UPROPERTY()
 	bool bMirrorStatsToEOS = false;
 
 	/** Set to true to write achievement data to EOS as well as the default platform */
-	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category="Crossplay Settings")
+	UPROPERTY()
 	bool bMirrorAchievementsToEOS = false;
 
 	/** Set to true to use EOS for session registration with data mirrored to the default platform */
-	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category="Crossplay Settings", DisplayName="Use Crossplay Sessions")
+	UPROPERTY()
 	bool bUseEOSSessions = false;
 
 	/** Set to true to have Epic Accounts presence information updated when the default platform is updated */
-	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category="Crossplay Settings")
+	UPROPERTY()
 	bool bMirrorPresenceToEAS = false;
 
 	/** Find the Settings for an artifact by name */
@@ -218,6 +229,7 @@ public:
 
 	static FEOSSettings GetSettings();
 	FEOSSettings ToNative() const;
+	static bool ManualGetSettingsForArtifact(const FString& ArtifactName, FEOSArtifactSettings& OutSettings);
 
 private:
 #if WITH_EDITOR
@@ -225,7 +237,6 @@ private:
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif
 	static bool AutoGetSettingsForArtifact(const FString& ArtifactName, FEOSArtifactSettings& OutSettings);
-	static bool ManualGetSettingsForArtifact(const FString& ArtifactName, FEOSArtifactSettings& OutSettings);
 
 	static FEOSSettings AutoGetSettings();
 	static const FEOSSettings& ManualGetSettings();
