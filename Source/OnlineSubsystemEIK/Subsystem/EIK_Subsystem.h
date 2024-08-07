@@ -3,7 +3,7 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "FindSessionsCallbackProxy.h"
-#include "OnlineLeaderboardsEOS.h"
+#include "../Private/OnlineLeaderboardsEOS.h"
 #include "Interfaces/OnlineSessionInterface.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Interfaces/OnlineStatsInterface.h"
