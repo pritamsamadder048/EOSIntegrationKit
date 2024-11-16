@@ -1,4 +1,4 @@
-﻿// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
@@ -37,7 +37,7 @@ public:
 
 	
 	UPROPERTY()
-	UObject* Var_WorldContextObject;
+	TObjectPtr<UObject> Var_WorldContextObject;
 	TMap<FString, FEIKAttribute> Var_SessionSettings;
 	bool Var_bShouldAdvertise;
 	bool Var_bAllowJoinInProgress;

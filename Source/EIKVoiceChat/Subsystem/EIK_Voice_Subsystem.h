@@ -60,7 +60,7 @@ public:
 	FString PlayerEOSVoiceChatName;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="EOS Integration Kit|Voice Chat")
-	AActor* PlayerActor = nullptr;
+	TObjectPtr<AActor> PlayerActor = nullptr;
 	
 };
 

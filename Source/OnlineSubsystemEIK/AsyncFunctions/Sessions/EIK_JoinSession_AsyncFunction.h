@@ -1,4 +1,4 @@
-﻿// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
@@ -52,7 +52,7 @@ public:
 
 	FSessionFindStruct Var_SessionToJoin;
 	UPROPERTY()
-	UObject* Var_WorldContextObject;
+	TObjectPtr<UObject> Var_WorldContextObject;
 
 
 	void Activate() override;
