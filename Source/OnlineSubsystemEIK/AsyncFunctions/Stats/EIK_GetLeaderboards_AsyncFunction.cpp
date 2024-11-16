@@ -30,7 +30,7 @@ void UEIK_GetLeaderboards_AsyncFunction::GetLeaderboardLocal()
 				TArray<TSharedRef<const FUniqueNetId>> Usersvar;
 				Usersvar.Add(IdentityPointerRef->GetUniquePlayerId(0).ToSharedRef());
 				FOnlineLeaderboardReadRef LeaderboardRead = MakeShareable(new FOnlineLeaderboardRead());
-				LeaderboardRead->LeaderboardName = LeaderboardName;
+				LeaderboardRead->LeaderboardName = LeaderboardName.ToString();
 				LeaderboardsPointerRef->OnLeaderboardReadCompleteDelegates.AddUObject(this,&UEIK_GetLeaderboards_AsyncFunction::OnGetLeaderboardCompleted,LeaderboardRead);
 				if(!LeaderboardsPointerRef->ReadLeaderboardsAroundRank(AroundRank,Range,LeaderboardRead))
 				{
@@ -87,7 +87,7 @@ void UEIK_GetLeaderboards_AsyncFunction::OnGetLeaderboardCompleted(bool bWasSucc
 		for (auto Row : LeaderboardRead->Rows)
 		{
 			int32 Score;
-			Row.Columns.Find("None")->GetValue(Score);
+			Row.Columns.Find(FString("None"))->GetValue(Score);
 			FEIKLeaderboardValue LocalRow;
 			LocalRow.Rank = Row.Rank;
 			LocalRow.Score = Score;

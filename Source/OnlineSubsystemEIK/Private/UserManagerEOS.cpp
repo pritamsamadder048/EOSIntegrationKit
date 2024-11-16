@@ -2413,7 +2413,7 @@ FPlatformUserId FUserManagerEOS::GetPlatformUserIdFromUniqueNetId(const FUniqueN
 	return GetPlatformUserIdFromLocalUserNum(GetLocalUserNumFromUniqueNetId(UniqueNetId));
 }
 
-void FUserManagerEOS::GetLinkedAccountAuthToken(int32 LocalUserNum, const FOnGetLinkedAccountAuthTokenCompleteDelegate& Delegate) const
+void FUserManagerEOS::GetLinkedAccountAuthToken(int32 LocalUserNum, const FString& TokenType, const FOnGetLinkedAccountAuthTokenCompleteDelegate& Delegate) const
 {
 	FExternalAuthToken ExternalToken;
 	ExternalToken.TokenString = GetAuthToken(LocalUserNum);
@@ -3560,7 +3560,7 @@ void FUserManagerEOS::ReadUserInfo(int32 LocalUserNum, EOS_EpicAccountId EpicAcc
 		}
 
 		// We mark this player as processed
-		IsFriendQueryUserInfoOngoingForLocalUserMap[LocalUserNum].RemoveSwap(EpicAccountId, false);
+		IsFriendQueryUserInfoOngoingForLocalUserMap[LocalUserNum].RemoveSwap(EpicAccountId, EAllowShrinking::No);
 
 		ProcessReadFriendsListComplete(LocalUserNum, true, TEXT(""));
 	};
@@ -3789,7 +3789,7 @@ bool FUserManagerEOS::QueryExternalIdMappings(const FUniqueNetId& UserId, const 
 			TArray<FString>& OngoingQueries = IsPlayerQueryExternalMappingsOngoingForLocalUserMap[LocalUserNum];
 			for (const FString& StringId : BatchIds)
 			{
-				OngoingQueries.RemoveSwap(StringId, false);
+				OngoingQueries.RemoveSwap(StringId, EAllowShrinking::No);
 			}
 
 			const bool bWasSuccessful = Result == EOS_EResult::EOS_Success;

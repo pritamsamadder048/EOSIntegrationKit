@@ -1245,7 +1245,8 @@ void FOnlineSessionEOS::AddAttribute(EOS_HSessionModification SessionModHandle, 
 void FOnlineSessionEOS::SetAttributes(EOS_HSessionModification SessionModHandle, FNamedOnlineSession* Session)
 {
 	// The first will let us find it on session searches
-	const FString SearchPresence(SEARCH_PRESENCE.ToString());
+	const FName EIK_SEARCH_PRESENCE = FName(TEXT("PRESENCESEARCH"));
+	const FString SearchPresence(EIK_SEARCH_PRESENCE.ToString());
 	const FAttributeOptions SearchPresenceAttribute(TCHAR_TO_UTF8(*SearchPresence), true);
 	AddAttribute(SessionModHandle, &SearchPresenceAttribute);
 
@@ -3972,7 +3973,8 @@ void FOnlineSessionEOS::SetLobbyAttributes(EOS_HLobbyModification LobbyModificat
 	check(Session != nullptr);
 
 	// The first will let us find it on session searches
-	const FString SearchPresence(SEARCH_PRESENCE.ToString());
+	const FName EIK_SEARCH_PRESENCE = FName(TEXT("PRESENCESEARCH"));
+	const FString SearchPresence(EIK_SEARCH_PRESENCE.ToString());
 	const FLobbyAttributeOptions SearchPresenceAttribute(TCHAR_TO_UTF8(*SearchPresence), true);
 	AddLobbyAttribute(LobbyModificationHandle, &SearchPresenceAttribute);
 

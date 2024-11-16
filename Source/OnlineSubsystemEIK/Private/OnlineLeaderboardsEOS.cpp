@@ -106,7 +106,7 @@ bool FOnlineLeaderboardsEOS::ReadLeaderboards(const TArray<FUniqueNetIdRef>& Pla
 	int32 Index = 0;
 	for (const FColumnMetaData& Column : ReadObject->ColumnMetadata)
 	{
-		FCStringAnsi::Strncpy(Options.PointerArray[Index], TCHAR_TO_UTF8(*Column.ColumnName.ToString()), EOS_OSS_STRING_BUFFER_LENGTH);
+		FCStringAnsi::Strncpy(Options.PointerArray[Index], TCHAR_TO_UTF8(*Column.ColumnName), EOS_OSS_STRING_BUFFER_LENGTH);
 		EOS_Leaderboards_UserScoresQueryStatInfo& StatInfo = Options.StatInfoArray[Index];
 		StatInfo.ApiVersion = EOS_LEADERBOARDS_USERSCORESQUERYSTATINFO_API_LATEST;
 		StatInfo.StatName = Options.PointerArray[Index];
@@ -153,7 +153,7 @@ bool FOnlineLeaderboardsEOS::ReadLeaderboards(const TArray<FUniqueNetIdRef>& Pla
 			for (const FColumnMetaData& Column : QueryContext->ReadObject->ColumnMetadata)
 			{
 				// Update which stat we are requesting
-				FCStringAnsi::Strncpy(StatName, TCHAR_TO_UTF8(*Column.ColumnName.ToString()), EOS_OSS_STRING_BUFFER_LENGTH);
+				FCStringAnsi::Strncpy(StatName, TCHAR_TO_UTF8(*Column.ColumnName), EOS_OSS_STRING_BUFFER_LENGTH);
 
 				EOS_Leaderboards_LeaderboardUserScore* LeaderboardUserScore = nullptr;
 				EOS_EResult UserCopyResult = EOS_Leaderboards_CopyLeaderboardUserScoreByUserId(EOSSubsystem->LeaderboardsHandle, &UserCopyOptions, &LeaderboardUserScore);
@@ -171,7 +171,7 @@ bool FOnlineLeaderboardsEOS::ReadLeaderboards(const TArray<FUniqueNetIdRef>& Pla
 		}
 
 		// Manually build the ranks by sorting and then assigning rank values
-		FName SortedColumn = QueryContext->ReadObject->SortedColumn;
+		FString SortedColumn = QueryContext->ReadObject->SortedColumn;
 		QueryContext->ReadObject->Rows.Sort([SortedColumn](const FOnlineStatsRow& RowA, const FOnlineStatsRow& RowB)
 		{
 			const FVariantData& ValueA = RowA.Columns[SortedColumn];
@@ -251,7 +251,7 @@ bool FOnlineLeaderboardsEOS::ReadLeaderboardsAroundRank(int32 Rank, uint32 Range
 	Options.ApiVersion = EOS_LEADERBOARDS_QUERYLEADERBOARDRANKS_API_LATEST;
 	Options.LeaderboardId = LeaderboardId;
 	Options.LocalUserId = EOSSubsystem->UserManager->GetLocalProductUserId(0);
-	FCStringAnsi::Strncpy(LeaderboardId, TCHAR_TO_UTF8(*ReadObject->LeaderboardName.ToString()), EOS_OSS_STRING_BUFFER_LENGTH);
+	FCStringAnsi::Strncpy(LeaderboardId, TCHAR_TO_UTF8(*ReadObject->LeaderboardName), EOS_OSS_STRING_BUFFER_LENGTH);
 
 	FQueryLeaderboardCallback* CallbackObj = new FQueryLeaderboardCallback(FOnlineLeaderboardsEOSWeakPtr(AsShared()));
 	FOnlineLeaderboardReadRef LambdaReadObject = ReadObject;
