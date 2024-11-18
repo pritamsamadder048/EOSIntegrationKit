@@ -942,7 +942,7 @@ void UEIK_Subsystem::GetLeaderboard(const FBP_GetFile_Callback& Result, FName Le
 			if(const IOnlineLeaderboardsPtr Leaderboards = SubsystemRef->GetLeaderboardsInterface())
 			{
 				ReadRef = MakeShared<FOnlineLeaderboardRead, ESPMode::ThreadSafe>();
-				ReadRef->LeaderboardName = LeaderboardName;
+				ReadRef->LeaderboardName = LeaderboardName.ToString();
 				Leaderboards->AddOnLeaderboardReadCompleteDelegate_Handle(FOnLeaderboardReadComplete::FDelegate::CreateUObject(this,&UEIK_Subsystem::OnLeaderboardListCompleted));
 				Leaderboards->ReadLeaderboardsAroundRank(Rank, Range,ReadRef);
 			}
