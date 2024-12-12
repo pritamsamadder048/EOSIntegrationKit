@@ -1117,7 +1117,7 @@ bool FOnlineSessionEOS::CreateSession(int32 HostingPlayerNum, FName SessionName,
 			Session = AddNamedSession(SessionName, NewSessionSettings);
 			check(Session);
 			Session->SessionState = EOnlineSessionState::Creating;
-
+			UE_LOG(LogTemp, Log, TEXT("FOnlineSessionEOS::CreateSession: SessionName=%s, IsDedicatedServer=%d, IsLobby=%d"), *SessionName.ToString(), bIsDedicatedServer, Session->SessionSettings.bUseLobbiesIfAvailable);
 			Session->OwningUserId = EOSSubsystem->UserManager->GetUniquePlayerId(HostingPlayerNum);
 			Session->OwningUserName = EOSSubsystem->UserManager->GetPlayerNickname(HostingPlayerNum);
 
